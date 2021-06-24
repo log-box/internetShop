@@ -1,7 +1,12 @@
 from django.shortcuts import render
+from logbox_shop.views import getjson
 
-
-# Create your views here.
 
 def products(request):
-    return render(request, 'products.html')
+    title = 'магазин/продукция'
+    context = {
+        'general_menu_links': getjson('general_menu_links'),
+        'title': title,
+        'links_menu': getjson('links_menu'),
+    }
+    return render(request, 'products.html', context)
