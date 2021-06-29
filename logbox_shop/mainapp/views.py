@@ -1,4 +1,5 @@
 from django.shortcuts import render
+
 from logbox_shop.views import getjson
 from mainapp.models import ProductCategory
 
@@ -13,3 +14,12 @@ def products(request):
         'products_category': products_category,
     }
     return render(request, 'products.html', context)
+
+
+def group_of_products(request, slug):
+    title = f'магазин/продукция/{slug}'
+    context = {
+        'general_menu_links': getjson('general_menu_links'),
+        'title': title,
+    }
+    return render(request, f'{slug}.html', context)

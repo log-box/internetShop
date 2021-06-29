@@ -23,24 +23,26 @@
     			<div class="clearfix">
     			</div>
     			<div class="tab-content">
+                    {% for item in products %}
     				<div class="block">
-    					<a href="#"><img src="/static/logbox_shop/img/product-1.jpg" alt="">
+    					<a href="#"><img src="/media/{{ item.image }}"  alt="">
     						<div class="text">
-    							<img src="/static/logbox_shop/img/icon-hover.png" alt="img">
-    							<h4>Отличный стул</h4>
-    							<p>Расположитесь комфортно. </p>
+    							<img src="{% static 'logbox_shop/img/icon-hover.png' %}" alt="img">
+    							<h4>{{ item.short_desc }}</h4>
+    							<p>{{ item.description }}</p>
     						</div>
     					</a>
     				</div>
-    				<div class="block">
-    					<a href="#"><img src="/static/logbox_shop/img/product-2.jpg" alt="">
-    						<div class="text">
-    							<img src="/static/logbox_shop/img/icon-hover.png" alt="">
-    							<h4>Стул повышенного качества</h4>
-    							<p>Не оторваться. </p>
-    						</div>
-    					</a>
-    				</div>
+                    {% endfor %}
+{#    				<div class="block">#}
+{#    					<a href="#"><img src="/static/logbox_shop/img/product-2.jpg" alt="">#}
+{#    						<div class="text">#}
+{#    							<img src="/static/logbox_shop/img/icon-hover.png" alt="">#}
+{#    							<h4>Стул повышенного качества</h4>#}
+{#    							<p>Не оторваться. </p>#}
+{#    						</div>#}
+{#    					</a>#}
+{#    				</div>#}
     			</div>
     		</div>
 
