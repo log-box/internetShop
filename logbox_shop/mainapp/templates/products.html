@@ -59,33 +59,17 @@
 					<a class="explore" href="#">показать все <img src="/static/logbox_shop/img/arrow.png" alt=""></a>
 				</div>
 				<div class="related-products clearfix">
-					<div class="block">
-						<a href="#"><img src="/static/logbox_shop/img/product-11.jpg" alt="">
-							<div class="text">
-								<img src="/static/logbox_shop/img/icon-hover.png" alt="img">
-								<h4>Стул повышенного качества</h4>
-								<p>Не оторваться. </p>
-							</div>
-						</a>
-					</div>
-					<div class="block">
-						<a href="#"><img src="/static/logbox_shop/img/product-21.jpg" alt="">
-							<div class="text">
-								<img src="/static/logbox_shop/img/icon-hover.png" alt="img">
-								<h4>Стул повышенного качества</h4>
-								<p>Не оторваться. </p>
-							</div>
-						</a>
-					</div>
-					<div class="block">
-						<a href="#"><img src="/static/logbox_shop/img/product-31.jpg" alt="">
-							<div class="text">
-								<img src="/static/logbox_shop/img/icon-hover.png" alt="img">
-								<h4>Стул повышенного качества</h4>
-								<p>Не оторваться. </p>
-							</div>
-						</a>
-					</div>
+                    {% for item in products %}
+                        <div class="block">
+                            <a href="#"><img src="/media/{{ item.image }}" alt="">
+                                <div class="text">
+                                    <img src="{% static 'logbox_shop/img/icon-hover.png' %}" alt="img">
+                                    <h4>{{ item.short_desc }}</h4>
+                                    <p>{{ item.description }}</p>
+                                </div>
+                            </a>
+                        </div>
+                    {% endfor %}
 
 				</div>
 			</div>
