@@ -29,14 +29,6 @@ class ProductCategory(models.Model):
         auto_now=True,
     )
 
-    def load_category(obj):
-        with open(f"{obj}.json", "r") as read_file:
-            data = json.load(read_file)
-            for item in data:
-                category_name = item['name']
-                category_href = item['href']
-                new_category = ProductCategory(name=category_name, href=category_href)
-                new_category.save()
 
     def __str__(self):
         return self.name or f'Category with id - {self.pk}'
@@ -50,7 +42,8 @@ class Product(models.Model):
     category = models.ForeignKey(
         ProductCategory,
         on_delete=models.CASCADE,
-        verbose_name='категория'
+        # on_delete=models.DO_NOTHING,
+        verbose_name='категория',
     )
     name = models.CharField(
         verbose_name='имя товара',
