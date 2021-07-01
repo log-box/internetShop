@@ -1052,16 +1052,8 @@ td:first-child {
 	display: block;
 }
 
-/*.index_img:before{*/
-/*	width: 270px;*/
-/*	height: 270px;*/
-/*}*/
+.index_img{
+	width: 270px;
+	height: 270px;
+}
 
-/*.prod_img:after{*/
-/*	width: 370px;*/
-/*	height: 370px;*/
-/*}*/
-
-/*.menu_li {*/
-/*	list-style-type: none;*/
-/*}*/
