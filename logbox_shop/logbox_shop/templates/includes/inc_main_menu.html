@@ -4,6 +4,22 @@
         {% for link in general_menu_links %}
             <li><a href="{{link.href}}" class="{% if link.href == request.path %}active{% endif %}">{{link.name}}</a></li>
         {% endfor %}
+        {% if user.is_authenticated %}
+            <li>
+                <a href="{% url 'auth:edit' %}">
+                    {{ user.first_name|default:'Пользователь' }}
+                </a>
+            </li>
+        {% endif %}
+
+        <li>
+            {% if user.is_authenticated %}
+              <a href="{% url 'auth:logout' %}">выйти</a>
+            {% else %}
+              <a href="{% url 'auth:login' %}">войти</a>
+            {% endif %}
+        </li>
+
     </ul>
     <a href="#" class="search"></a>
     <a href="#" class="basket"></a>
