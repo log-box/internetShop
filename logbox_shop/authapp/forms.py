@@ -31,7 +31,13 @@ class ShopUserRegisterForm(UserCreationForm):
         data = self.cleaned_data['age']
         if data < 18:
             raise forms.ValidationError("Вы слишком молоды!")
+        return data
 
+    def clean_email(self):
+        data = self.cleaned_data['email']
+        pattern = data.split('.')[1].lower()
+        if pattern != 'ru':
+            raise forms.ValidationError('При первичной регистрации почта может быть только Российской')
         return data
 
 
@@ -48,9 +54,8 @@ class ShopUserEditForm(UserChangeForm):
             if field_name == 'password':
                 field.widget = forms.HiddenInput()
             if field_name == 'avatar':
-                field.widget.initial_text = 'test'
-
-
+                field.widget.initial_text = 'Текущее фото'
+                field.label = 'Фото'
 
     def clean_age(self):
         data = self.cleaned_data['age']
