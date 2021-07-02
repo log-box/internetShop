@@ -29,7 +29,6 @@ class ProductCategory(models.Model):
         auto_now=True,
     )
 
-
     def __str__(self):
         return self.name or f'Category with id - {self.pk}'
 
