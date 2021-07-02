@@ -27,18 +27,12 @@ class ShopUserRegisterForm(UserCreationForm):
             field.widget.attrs['class'] = 'form-control'
             field.help_text = ''
 
-    def clean_age(self):
-        data = self.cleaned_data['age']
-        if data < 18:
-            raise forms.ValidationError("Вы слишком молоды!")
-        return data
-
-    def clean_email(self):
-        data = self.cleaned_data['email']
-        pattern = data.split('.')[1].lower()
-        if pattern != 'ru':
+    def clean(self):
+        super().clean()
+        if self.cleaned_data['age'] < 18:
+            raise forms.ValidationError('Вы слишком молоды для данного сайта')
+        if self.cleaned_data['email'].split('.')[1].lower() != 'ru':
             raise forms.ValidationError('При первичной регистрации почта может быть только Российской')
-        return data
 
 
 class ShopUserEditForm(UserChangeForm):
