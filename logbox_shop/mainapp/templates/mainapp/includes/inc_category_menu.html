@@ -1,6 +1,6 @@
 <div class="links clearfix">
     <ul class="links-menu">
-        {% for link in products_category %}
+        {% for link in products_category_menu %}
             <li><a href="{{link.href}}" class="{% if link.href == 'products_all'%}active{% endif %}">{{link.name}}</a></li>
         {% endfor %}
     </ul>
