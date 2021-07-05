@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="slider">
+    {% include 'includes/inc_main_menu.html' %}
+    {% if user.is_authenticated %}
+{#        <div class="container" style="margin-top: 50px">#}
+                <div class="row" style="margin-top: 50px">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th scope="col">#</th>
+                          <th scope="col">Продукт</th>
+                          <th scope="col">Количество</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      {% for item in basket %}
+                          <tr>
+                              <th scope="row">{{ forloop.counter }}</th>
+                              <td>{{ item.product }}</td>
+                              <td>{{ item.quantity }}</td>
+                          </tr>
+                      {% endfor %}
+
+
+                      </tbody>
+                    </table>
+{#                </div>#}
+        </div>
+    {% endif %}
+    </div>
+
+{% endblock %}

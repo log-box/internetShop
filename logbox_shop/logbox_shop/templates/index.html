@@ -13,9 +13,9 @@
     			<div class="navi">
     				<a href="#"></a><a href="#"></a><a href="#"></a>
     			</div>
-    		</div>
+        </div>
 
-    		<div class="featured">
+        <div class="featured">
     			<div class="featured-menu">
     					<a class="active" href="#">Популярные</a><a href="#">Новинки</a>
     			</div>
@@ -25,7 +25,7 @@
     			<div class="tab-content">
                     {% for item in products %}
     				<div class="block">
-    					<a href="#"><img src="/media/{{ item.image }}"  alt="img" class="index_img">
+    					<a href="{%  url 'basket:add' item.pk %}"><img src="/media/{{ item.image }}"  alt="img" class="index_img">
     						<div class="text">
     							<img src="{% static 'logbox_shop/img/icon-hover.png' %}" alt="img">
     							<h4>{{ item.short_desc }}</h4>
@@ -36,7 +36,7 @@
                     {% endfor %}
 
     			</div>
-    		</div>
+        </div>
 
-    		<div class="clr"></div>
+        <div class="clr"></div>
     {% endblock %}
