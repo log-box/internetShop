@@ -25,7 +25,8 @@
     <a href="{% url 'basket:view' %}" class="basket" >
 {#        <span>#}
             {% if basket %}
-                {{ basket|length }}
+                {{ basket.total_sum }}
+<!--                {{ basket|length }}-->
             {% endif %}
 {#        </span>#}
     </a>

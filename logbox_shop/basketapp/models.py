@@ -26,6 +26,6 @@ class Basket(models.Model):
         auto_now_add=True,
     )
 
-    def total_sum(self, user):
-        # field_name_sum = Basket.objects.aggregate(Sum('field_name'))
-        pass
+    def total_sum(request):
+        total_sum = Basket.objects.filter(user__id=request.user).aggregate(Sum('product__price'))
+        return total_sum
