@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.db.models import Sum
 # Create your models here.
 from django.db.models import Sum
 
@@ -26,6 +26,11 @@ class Basket(models.Model):
         auto_now_add=True,
     )
 
-    def total_sum(request):
-        total_sum = Basket.objects.filter(user__id=request.user).aggregate(Sum('product__price'))
-        return total_sum
+
+    # @property
+    def get_sum(self):
+        return self.quantity*self.product.price
+    # def total_sum(request):
+    #     total_sum = Basket.objects.filter(user__id=request.user).aggregate(Sum('product__price'))
+    #     return total_sum
+    total_sum = property(get_sum)

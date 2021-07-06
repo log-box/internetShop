@@ -4,10 +4,11 @@
 {% block content %}
     <div class="slider" style="height: 550px">
     {% include 'includes/inc_main_menu.html' %}
-        <h2 style="margin-top: 50px">КОРЗИНА</h2>
+        <h2 style="margin-top: 50px">КОРЗИНА {{ basket.total_sum }} </h2>
     {% if user.is_authenticated %}
         <div class="container" style="margin-top: 50px">
                 <div class="row" style="margin-top: 50px">
+
                     <table class="table">
                       <thead>
                         <tr>
@@ -18,11 +19,16 @@
                       </thead>
                       <tbody>
                       {% for item in basket %}
+                          {% if item.quantity != 0 %}
                           <tr>
+
                               <th scope="row">{{ forloop.counter }}</th>
                               <td>{{ item.product }}</td>
                               <td>{{ item.quantity }}</td>
+                              <td>{{ item.total_sum }}</td>
+                              <td><a href="{% url 'basket:remove' item.pk  %}">УДАЛИТЬ</a> </td>
                           </tr>
+                          {% endif %}
                       {% endfor %}
 
 

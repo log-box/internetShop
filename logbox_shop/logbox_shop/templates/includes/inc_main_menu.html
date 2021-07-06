@@ -24,9 +24,12 @@
     <a href="#" class="search"></a>
     <a href="{% url 'basket:view' %}" class="basket" >
 {#        <span>#}
+{#        {% basket.total_sum %}#}
             {% if basket %}
+{#                {{ basket.total_sum }}#}
+{#                {{ basket|length }}#}
                 {{ basket.total_sum }}
-<!--                {{ basket|length }}-->
+{#                {{ basket.total_sum }}#}
             {% endif %}
 {#        </span>#}
     </a>

@@ -10,9 +10,12 @@ from mainapp.models import Product
 def basket(request):
     if request.user.is_authenticated:
         basket = Basket.objects.filter(user=request.user)
+        # from django.db.models import Sum
+        # field_name_sum = Basket.objects.aggregate(Sum('total_sum'))
         context = {
             'basket': basket,
             'general_menu_links': getjson('general_menu_links'),
+            # 'sum': field_name_sum,
         }
         return render(request, 'basketapp/basket.html', context)
 
@@ -32,4 +35,14 @@ def basket_add(request, pk):
 
 
 def basket_remove(request, pk):
-    return render(request, 'basketapp/basket.html')
+    product = get_object_or_404(Product, pk=pk)
+    basket = Basket.objects.filter(user=request.user, product=product).first()
+    if not basket:
+        basket = Basket(user=request.user, product=product)
+    basket.quantity -= 1
+    basket.save()
+    context = {
+        'basket': basket,
+        'general_menu_links': getjson('general_menu_links'),
+    }
+    return render(request, 'basketapp/basket.html', context)
