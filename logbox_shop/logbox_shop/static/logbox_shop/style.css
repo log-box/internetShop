@@ -83,13 +83,14 @@ html, body {
 }
 .basket {
 	display: block;
-	width: 23px;
+	width: 203px;
 	height: 23px;
 	background-image: url(img/basket.png);
 	background-repeat: no-repeat;
 	position: absolute;
 	top: 63px;
 	left: 1210px;
+	padding-left: 30px;
 }
 
 .clearfix:after {

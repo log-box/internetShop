@@ -1,10 +1,10 @@
 from django.db import models
-from django.db.models import Sum
-# Create your models here.
-from django.db.models import Sum
 
 from logbox_shop import settings
 from mainapp.models import Product
+
+
+# Create your models here.
 
 
 class Basket(models.Model):
@@ -26,11 +26,16 @@ class Basket(models.Model):
         auto_now_add=True,
     )
 
+    @property
+    def product_cost(self):
+        return self.product.price * self.quantity
 
-    # @property
-    def get_sum(self):
-        return self.quantity*self.product.price
-    # def total_sum(request):
-    #     total_sum = Basket.objects.filter(user__id=request.user).aggregate(Sum('product__price'))
-    #     return total_sum
-    total_sum = property(get_sum)
+    @property
+    def total_quantity(self):
+        _items = Basket.objects.filter(user=self.user)
+        return sum(list(map(lambda x: x.quantity, _items)))
+
+    @property
+    def total_cost(self):
+        _items = Basket.objects.filter(user=self.user)
+        return sum(list(map(lambda x: x.product_cost, _items)))

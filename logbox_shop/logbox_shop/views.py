@@ -1,4 +1,6 @@
 import json
+import random
+
 from django.shortcuts import render
 
 from basketapp.models import Basket
@@ -9,6 +11,10 @@ def getjson(obj):
     with open(f"{obj}.json", "r") as read_file:
         return json.load(read_file)
 
+
+# def hot_products():
+#     products = Product.objects.all()
+#     return random.sample(list(products))
 
 def index(request):
     basket = []

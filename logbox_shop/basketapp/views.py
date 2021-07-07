@@ -35,17 +35,6 @@ def basket_add(request, pk):
 
 
 def basket_remove(request, pk):
-    # product = get_object_or_404(Product, pk=pk)
-    # basket = Basket.objects.filter(user=request.user, product=product).first()
-    # if not basket:
-    #     basket = Basket(user=request.user, product=product)
-    # basket.quantity -= 1
-    # basket.save()
-    # context = {
-    #     'basket': basket,
-    #     'general_menu_links': getjson('general_menu_links'),
-    # }
-    # return render(request, 'basketapp/basket.html', context)
     basket_record = get_object_or_404(Basket, pk=pk)
     basket_record.delete()
 
