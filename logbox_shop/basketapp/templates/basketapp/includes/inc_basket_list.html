@@ -1,0 +1,43 @@
+        <div class="container basket_list" style="margin-top: 50px">
+                <div class="row" style="margin-top: 50px">
+
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th scope="col">#</th>
+                          <th scope="col">Фото</th>
+                          <th scope="col">Продукт</th>
+                          <th scope="col">Количество</th>
+                          <th scope="col">Цена</th>
+                          <th scope="col">Удалить</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      {% for item in basket %}
+                          {% if item.quantity != 0 %}
+                          <tr>
+
+                              <th scope="row">{{ forloop.counter }}</th>
+                              <td><a><img src="/media/{{ item.product.image }}" alt="" height="50" width="50"></a></td>
+                              <td>{{ item.product }}</td>
+                              <td><input type="number"
+                                    name="{{ item.pk }}"
+                                    min="0"
+                                    value="{{ item.quantity }}">
+                              </td>
+                              <td>{{ item.product_cost }}</td>
+                              <td><button class="btn btn-round">
+                                  <a href="{% url 'basket:remove' item.pk  %}"> Удалить</a>
+                              </button> </td>
+                          </tr>
+                          {% endif %}
+                      {% endfor %}
+                      </tbody>
+                    </table>
+                        {% if basket %}
+                            <div class="basket_summary">
+                                В корзине {{ basket.0.total_quantity }} товаров на сумму {{ basket.0.total_cost }} рублей
+                            </div>
+                        {% endif %}
+                </div>
+        </div>

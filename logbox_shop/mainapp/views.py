@@ -37,7 +37,7 @@ def products(request):
 
 
 def product(request, pk):
-    title = f'Продукты/{pk}'
+    title = f'Продукты/{(get_object_or_404(Product, pk=pk)).short_desc}'
     context = {
         'title': title,
         'general_menu_links': getjson('general_menu_links'),
