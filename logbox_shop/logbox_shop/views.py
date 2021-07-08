@@ -12,10 +12,6 @@ def getjson(obj):
         return json.load(read_file)
 
 
-# def hot_products():
-#     products = Product.objects.all()
-#     return random.sample(list(products))
-
 def index(request):
     basket = []
     if request.user.is_authenticated:

@@ -7,48 +7,63 @@ from logbox_shop.views import getjson
 from mainapp.models import ProductCategory, Product
 
 
+def get_basket(user):
+    if user.is_authenticated:
+        return Basket.objects.filter(user=user)
+    else:
+        return []
+
+
+def get_hot_product():
+    return random.sample(list(Product.objects.all()), 1)[0]
+
+
+def get_same_products(hot_product):
+    return Product.objects.filter(category=hot_product.category).exclude(pk=hot_product.pk)[:3]
+
+
 def products(request):
     title = 'магазин/продукция'
-    products_category_menu = ProductCategory.objects.all()
-    basket = []
-    if request.user.is_authenticated:
-        basket = Basket.objects.filter(user=request.user)
-    # вычислям длину (кол-во) продуктов всего для рандомного числа в этом диапазоне
-    _len = Product.objects.all().__len__()
-    rand_start = random.randint(0, _len)
-    rand_end = random.randint(0, _len)
-    if rand_start > rand_end:
-        rand_start, rand_end = rand_end, rand_start
-    ###############################################################################
-    # Берем из базы рандомное число продуктов в переменную proucts и передаем ее в контекст для отображения
-    products = Product.objects.all()[rand_start:rand_end]
+    hot_product = get_hot_product()
     context = {
         'general_menu_links': getjson('general_menu_links'),
         'title': title,
-        'products_category_menu': products_category_menu,
-        'products': products,
-        'basket': basket,
+        'products_category_menu': ProductCategory.objects.all(),
+        'same_products': get_same_products(hot_product),
+        'hot_product': hot_product,
+        'basket': get_basket(request.user),
     }
-    #######################################################################################################
     return render(request, 'products.html', context)
+
+
+def product(request, pk):
+    title = f'Продукты/{pk}'
+    context = {
+        'title': title,
+        'general_menu_links': getjson('general_menu_links'),
+        'products_category_menu': ProductCategory.objects.all(),
+        'product': get_object_or_404(Product, pk=pk),
+        'basket': get_basket(request.user),
+    }
+
+    return render(request, 'product.html', context)
 
 
 def group_of_products(request, slug):
     title = f'магазин/продукция/{slug}'
-    products_category_menu = ProductCategory.objects.all()
     basket = []
     if request.user.is_authenticated:
-        basket = Basket.objects.filter(user=request.user)
+        basket = get_basket(request.user)
     if slug == 'products_all':
         products = Product.objects.all().order_by('price')
         category = {'name': 'все'}
     else:
-        products = Product.objects.filter(category__href=slug).order_by('price')
+        products = Product.objects.filter(category__href=slug)
         category = get_object_or_404(ProductCategory, href=slug)
     context = {
         'general_menu_links': getjson('general_menu_links'),
         'title': title,
-        'products_category_menu': products_category_menu,
+        'products_category_menu': ProductCategory.objects.all(),
         'products': products,
         'category': category,
         'basket': basket,

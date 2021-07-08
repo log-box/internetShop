@@ -8,27 +8,27 @@
 {% block content %}
 	<div class="hero-white">
              {% include 'includes/inc_main_menu.html' %}
-        </div>
+    </div>
 		<div class="details">
             {%  include 'mainapp/includes/inc_category_menu.html' %}
 			<div class="details-products">
 				<div class="details-slider">
 					<div class="slider-product">
-						<img src="/static/logbox_shop/img/slider1.jpg">
+						<img src="/media/{{ hot_product.image }}">
 					</div>
 					<div class="slider-control">
 						<div class="block">
-							<a href="#"><img src="/static/logbox_shop/img/controll.jpg" alt="">
+							<a href="#"><img src="/media/{{ hot_product.image }}" alt="">
 								<div class="text"></div>
 							</a>
 						</div>
 						<div class="block">
-							<a href="#"><img src="/static/logbox_shop/img/controll1.jpg" alt="">
+							<a href="#"><img src="/media/{{ hot_product.image }}" alt="">
 								<div class="text"></div>
 							</a>
 						</div>
 						<div class="block">
-							<a href="#"><img src="/static/logbox_shop/img/controll2.jpg" alt="">
+							<a href="#"><img src="/media/{{ hot_product.image }}" alt="">
 								<div class="text"></div>
 							</a>
 						</div>
@@ -36,19 +36,14 @@
 				</div>
 
 				<div class="description">
-					<h3 class="big-bold">Отличный стул</h3>
+					<h3 class="big-bold">{{ hot_product.name}}</h3>
 					<h3 class="red">горячее предложение</h3>
-					<p class="price"> 2585.9 <span>руб</span></p>
-					<a href="#" class="red-button">
+					<p class="price">{{hot_product.price}}<span>руб</span></p>
+					<a href="{% url 'products:product' hot_product.pk %}" class="red-button">
 						заказать <i class="fa fa-chevron-right" aria-hidden="true"></i>
 					</a>
 					<div class="description-text">
-						<p>Расположитесь комфортно.</p> 
-						<p>Отличное качество материалов
-						позволит вам это.</p> 
-						<p>Различные цвета</p>
-						<p>высочайший уровень
-						эргономики и прочность.</p>
+                        {{ hot_product.description }}
 					</div>
 				</div>
 			</div>
@@ -59,9 +54,9 @@
 					<a class="explore" href="#">показать все <img src="/static/logbox_shop/img/arrow.png" alt=""></a>
 				</div>
 				<div class="related-products clearfix">
-                    {% for item in products %}
+                    {% for item in same_products %}
                         <div class="block">
-                            <a href="{% url 'basket:add' item.pk  %}" ><img src="/media/{{ item.image }}" alt="img" class="prod_img_370" >
+                            <a href="{% url 'products:product' item.pk  %}" ><img src="/media/{{ item.image }}" alt="img" class="prod_img_370" >
                                 <div class="text">
                                     <img src="{% static 'logbox_shop/img/icon-hover.png' %}" alt="img">
                                     <h4>{{ item.short_desc }}</h4>
