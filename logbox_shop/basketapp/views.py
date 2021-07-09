@@ -13,7 +13,7 @@ from mainapp.models import Product
 @login_required
 def basket(request):
     if request.user.is_authenticated:
-        basket = Basket.objects.filter(user=request.user)
+        basket = Basket.objects.filter(user=request.user).order_by('product__name')
         # from django.db.models import Sum
         # field_name_sum = Basket.objects.aggregate(Sum('total_sum'))
         context = {
@@ -33,7 +33,7 @@ def basket_add(request, pk):
 
     if request.user.is_authenticated:
         product = get_object_or_404(Product, pk=pk)
-        basket = Basket.objects.filter(user=request.user, product=product).first()
+        basket = Basket.objects.filter(user=request.user, product=product).order_by('product__name')
         if not basket:
             basket = Basket(user=request.user, product=product)
         basket.quantity += 1
@@ -60,7 +60,7 @@ def basket_edit(request, pk, quantity):
             new_basket_item.save()
         else:
             new_basket_item.delete()
-        basket_items = Basket.objects.filter(user=request.user).order_by('product__category')
+        basket_items = Basket.objects.filter(user=request.user).order_by('product__name')
         context = {
             'basket': basket_items,
         }
