@@ -1,5 +1,4 @@
 import json
-import random
 
 from django.shortcuts import render
 
@@ -18,7 +17,6 @@ def index(request):
         basket = Basket.objects.filter(user=request.user)
     title = 'магазин/главная'
     products = Product.objects.all()[:3]
-
     context = {
         'general_menu_links': getjson('general_menu_links'),
         'title': title,
