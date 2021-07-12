@@ -13,6 +13,7 @@ class Basket(models.Model):
         on_delete=models.CASCADE,
         related_name='basket',
     )
+
     product = models.ForeignKey(
         Product,
         on_delete=models.CASCADE,

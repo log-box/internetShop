@@ -1,10 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'adminapp/base.html' %}
+{% load static %}
 
-</body>
-</html>
+
+{% block content %}
+        <form class="form-row"   method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input class="form-control" type="submit" value="Создать">
+        </form>
+        <button class="btn btn-round form-control last">
+            <a href="{% url 'admin_stuff:users' %}" class="">
+                назад
+            </a>
+        </button>
+{% endblock %}
