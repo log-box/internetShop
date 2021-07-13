@@ -173,7 +173,7 @@ def product_delete(request, pk):
     if request.method == 'POST':
         product.is_deleted = True
         product.save()
-        return HttpResponseRedirect(reverse('admin_stuff:categories'))
+        return HttpResponseRedirect(reverse('admin_stuff:products', kwargs={'pk': product.category.pk}))
     context = {
         'title': title,
         'product': product,
