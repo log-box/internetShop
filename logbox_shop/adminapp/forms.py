@@ -3,7 +3,7 @@ from django.forms import ModelForm
 
 from authapp.forms import ShopUserEditForm, ShopUserRegisterForm
 from authapp.models import ShopUser
-from mainapp.models import ProductCategory
+from mainapp.models import ProductCategory, Product
 
 
 class ShopUserAdminEditForm(ShopUserEditForm):
@@ -48,3 +48,13 @@ class ProductsCategoryCreateForm(forms.ModelForm):
         fields = ['name', 'description', 'is_deleted']
 
 
+class ProductEditForm(ModelForm):
+    class Meta:
+        model = Product
+        fields = '__all__'
+
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+    #     for field_name, field in self.fields.items():
+    #         field.widget.attrs['class'] = ''
+    #         field.help_text = ''

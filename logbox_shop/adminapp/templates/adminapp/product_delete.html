@@ -1,0 +1,24 @@
+{% extends 'adminapp/base.html' %}
+{% load static %}
+
+
+{% block content %}
+    <div class="col-4 mx-auto">
+    <div class="row">
+            <div class="row">
+                <div class="user_avatar">
+                    Вы действительно хотите удалить продукт {{ product.name }} ?
+                </div>
+            </div>
+            <form class="form-horizontal" action="{% url 'admin_stuff:product_delete' product.pk %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input class="form-control" type="submit" value="Удалить">
+            </form>
+            <button class="btn btn-round form-control last">
+                <a href="{% url 'admin_stuff:products' product.category.pk %}" class="">
+                Назад
+                </a>
+            </button>
+    </div>
+    </div>
+{% endblock %}

@@ -85,6 +85,8 @@ class Product(models.Model):
         auto_now=True,
     )
 
+    is_deleted = models.BooleanField(default=False)
+
     def __str__(self):
         return self.name or f'Product with id - {self.pk}'
 

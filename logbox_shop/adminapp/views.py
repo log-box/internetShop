@@ -5,9 +5,9 @@ from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 
 from adminapp.forms import ShopUserAdminEditForm, ShopUserAdminRegisterForm, ProductsCategoryEditForm, \
-    ProductsCategoryCreateForm
+    ProductsCategoryCreateForm, ProductEditForm
 from authapp.models import ShopUser
-from mainapp.models import ProductCategory
+from mainapp.models import ProductCategory, Product
 
 
 def user_create(request):
@@ -128,21 +128,54 @@ def category_delete(request, pk):
     return render(request, 'adminapp/category_delete.html', context)
 
 
-def product_create(request):
+def product_create(request, pk):
     pass
 
 
-def products(request):
-    pass
+def products(request, pk):
+    products = Product.objects.filter(category_id=pk)
+    one_product = Product.objects.filter(category_id=pk)[0]
+
+    title = f'Товары категории "{one_product.category}"'
+    context = {
+        'title': title,
+        'products': products,
+        'prod': one_product,
+    }
+    return render(request, 'adminapp/products.html', context)
 
 
 def product_read(request):
     pass
 
 
-def product_update(request):
-    pass
+def product_update(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    title = f'Редактировние {product.name}'
+    if request.method == 'POST':
+        edit_form = ProductEditForm(request.POST, instance=product)
+        if edit_form.is_valid():
+            edit_form.save()
+            return HttpResponseRedirect(reverse('admin_stuff:products', kwargs={'pk': product.category.pk}))
+    else:
+        edit_form = ProductEditForm(instance=product)
+    context = {
+        'title': title,
+        'edit_form': edit_form,
+        'product': product,
+    }
+    return render(request, 'adminapp/product_update.html', context)
 
 
-def product_delete(request):
-    pass
+def product_delete(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    title = f'Удаление {product.name}'
+    if request.method == 'POST':
+        product.is_deleted = True
+        product.save()
+        return HttpResponseRedirect(reverse('admin_stuff:categories'))
+    context = {
+        'title': title,
+        'product': product,
+    }
+    return render(request, 'adminapp/product_delete.html', context)
