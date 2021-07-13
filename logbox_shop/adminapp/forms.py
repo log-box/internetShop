@@ -1,5 +1,9 @@
+from django import forms
+from django.forms import ModelForm
+
 from authapp.forms import ShopUserEditForm, ShopUserRegisterForm
 from authapp.models import ShopUser
+from mainapp.models import ProductCategory
 
 
 class ShopUserAdminEditForm(ShopUserEditForm):
@@ -24,3 +28,23 @@ class ShopUserAdminRegisterForm(ShopUserRegisterForm):
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-group'
             field.help_text = ''
+
+
+class ProductsCategoryEditForm(ModelForm):
+    class Meta:
+        model = ProductCategory
+        fields = ['name', 'description', 'is_deleted']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = ''
+            field.help_text = ''
+
+
+class ProductsCategoryCreateForm(forms.ModelForm):
+    class Meta:
+        model = ProductCategory
+        fields = ['name', 'description', 'is_deleted']
+
+
