@@ -58,3 +58,5 @@ class ProductEditForm(ModelForm):
     #     for field_name, field in self.fields.items():
     #         field.widget.attrs['class'] = ''
     #         field.help_text = ''
+
+

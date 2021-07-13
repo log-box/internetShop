@@ -129,7 +129,21 @@ def category_delete(request, pk):
 
 
 def product_create(request, pk):
-    pass
+    title = f'Создание нового продукта'
+    product = Product.objects.filter(category_id=pk)[0]
+    if request.method == 'POST':
+        create_form = ProductEditForm(request.POST, request.FILES)
+        if create_form.is_valid():
+            create_form.save()
+            return HttpResponseRedirect(reverse('admin_stuff:products', kwargs={'pk': product.category.pk}))
+    else:
+        create_form = ProductEditForm()
+    context = {
+        'title': title,
+        'create_form': create_form,
+        'product': product,
+    }
+    return render(request, 'adminapp/product_create.html', context)
 
 
 def products(request, pk):
