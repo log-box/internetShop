@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
-# Create your views here.
+
 from django.urls import reverse
 
 from adminapp.forms import ShopUserAdminEditForm, ShopUserAdminRegisterForm, ProductsCategoryEditForm, \
@@ -131,13 +131,14 @@ def category_delete(request, pk):
 def product_create(request, pk):
     title = f'Создание нового продукта'
     product = Product.objects.filter(category_id=pk)[0]
+    category = get_object_or_404(ProductCategory, pk=pk)
     if request.method == 'POST':
         create_form = ProductEditForm(request.POST, request.FILES)
         if create_form.is_valid():
             create_form.save()
             return HttpResponseRedirect(reverse('admin_stuff:products', kwargs={'pk': product.category.pk}))
     else:
-        create_form = ProductEditForm()
+        create_form = ProductEditForm(initial={'category': category})
     context = {
         'title': title,
         'create_form': create_form,
@@ -159,8 +160,14 @@ def products(request, pk):
     return render(request, 'adminapp/products.html', context)
 
 
-def product_read(request):
-    pass
+def product_read(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    title = f'продукт/{product.name}'
+    context = {
+        'title': title,
+        'product': product,
+    }
+    return render(request, 'adminapp/product_read.html', context)
 
 
 def product_update(request, pk):

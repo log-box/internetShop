@@ -29,7 +29,11 @@
                         {% for product in products %}
 
                             <tr {% if product.is_deleted %} style="opacity: 0.5;" {% endif %}>
-                                <td>{{ product.name }}</td>
+                                <td>
+                                    <a href="{% url 'admin_stuff:product_read' product.pk %}">
+                                        {{ product.name }}
+                                    </a>
+                                </td>
                                 <td> <img  class="img-responsive watch-right" alt="not found" src="/media/{{product.image}}"/></td>
                                 <td>{{ product.short_desc }}</td>
                                 <td>{{ product.description }}</td>
