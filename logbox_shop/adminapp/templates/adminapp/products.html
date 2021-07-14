@@ -4,11 +4,11 @@
 {% block content %}
 <main>
     <div class="container-fluid">
-        <h1 class="mt-4">Товары категории "{{ prod.category|title }}" </h1>
+        <h1 class="mt-4">{% if title != 'Пустая категория' %}Товары категории "{{ prod.category|title }}" {% else %} В категории нет товаров {% endif %} </h1>
         <div class="card mb-4">
             <div class="card-header">
                 <i class="fas  mr-1"></i>
-                {{ prod.category|title }}
+                {% if title != 'Пустая категория' %} {{ prod.category|title }} {% else %} {% endif %}
             </div>
             <div class="card-body">
                 <div class="table-responsive">

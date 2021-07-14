@@ -149,9 +149,14 @@ def product_create(request, pk):
 
 def products(request, pk):
     products = Product.objects.filter(category_id=pk)
-    one_product = Product.objects.filter(category_id=pk)[0]
+    if len(products) > 0:
+        one_product = Product.objects.filter(category_id=pk)[0]
+        title = f'Товары категории "{one_product.category}"'
+    else:
+        one_product = Product.objects.first()
+        title = 'Пустая категория'
 
-    title = f'Товары категории "{one_product.category}"'
+
     context = {
         'title': title,
         'products': products,
