@@ -1,4 +1,5 @@
-        <div class="basket_list" style="margin-top: 50px">
+{% load my_tags %}
+<div class="basket_list" style="margin-top: 50px">
                 <div class="row" style="margin-top: 50px">
 
                     <table class="table">
@@ -18,7 +19,7 @@
                           <tr>
 
                               <th scope="row">{{ forloop.counter }}</th>
-                              <td><a><img src="/media/{{ item.product.image }}" alt="" height="50" width="50"></a></td>
+                              <td><a><img src="{{ item.product.image|media_folder_products }}" alt="" height="50" width="50"></a></td>
                               <td>{{ item.product }}</td>
                               <td><input type="number"
                                     name="{{ item.pk }}"

@@ -1,5 +1,6 @@
 {%  extends 'base.html' %}
 {% load static %}
+{% load my_tags %}
 
 {%  block css %}
 	<link rel="stylesheet" type="text/css" href="{%  static 'mainapp/style.css' %}">
@@ -26,7 +27,7 @@
 				<div class="related-products clearfix ">
                     {% for item in products %}
                         <div class="block">
-                            <a href="{% url 'products:product' item.pk  %}" ><img src="/media/{{ item.image }}" alt="img" class="prod_img_370" >
+                            <a href="{% url 'products:product' item.pk  %}" ><img src="{{ item.image|media_folder_products }}" alt="img" class="prod_img_370" >
                                 <div class="text">
                                     <img src="{% static 'logbox_shop/img/icon-hover.png' %}" alt="img">
                                     <h4>{{ item.short_desc }}</h4>

@@ -3,11 +3,9 @@
 
 
 {% block content %}
-{#        <form class="form-row" action="{% url 'admin_stuff:user_update' user.pk %}" method="post" enctype="multipart/form-data">#}
         <form class="form-row"  method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {{ edit_form.as_p }}
-{#            <input type="hidden" name="target_user_pk" value="{{ target_user_pk }}">#}
             <input class="form-control" type="submit" value="обновить">
         </form>
         <button class="btn btn-round form-control last">

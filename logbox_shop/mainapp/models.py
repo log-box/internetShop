@@ -16,6 +16,7 @@ class ProductCategory(models.Model):
         blank=True,
     )
     href = models.CharField(
+        verbose_name='адрес(ссылка)',
         max_length=64,
         unique=True,
         blank=True,
@@ -29,7 +30,10 @@ class ProductCategory(models.Model):
         auto_now=True,
     )
 
-    is_deleted = models.BooleanField(default=False)
+    is_deleted = models.BooleanField(
+        default=False,
+        verbose_name='удалена',
+    )
 
     def __str__(self):
         return self.name or f'Category with id - {self.pk}'

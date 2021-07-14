@@ -1,12 +1,12 @@
 {% extends 'adminapp/base.html' %}
 {% load static %}
-
+{% load my_tags %}
 
 {% block content %}
 
     <div class="card" style="width: 18rem;">
         <h2>Товар из категории: {{ product.category|title }}</h2>
-        <img src="/media/{{product.image}}" class="card-img-top" alt="not found img">
+        <img src="{{product.image|media_folder_products}}" class="card-img-top" alt="not found img">
     <div class="card-body">
     <h5 class="card-title">{{ product.name }}</h5>
     <p class="card-text">{{ product.description }}</p>

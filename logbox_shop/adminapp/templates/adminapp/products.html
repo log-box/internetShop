@@ -1,6 +1,6 @@
 {% extends 'adminapp/base.html' %}
 {% load static %}
-
+{% load my_tags %}
 {% block content %}
 <main>
     <div class="container-fluid">
@@ -34,7 +34,7 @@
                                         {{ product.name }}
                                     </a>
                                 </td>
-                                <td> <img  class="img-responsive watch-right" alt="not found" src="/media/{{product.image}}"/></td>
+                                <td> <img  class="img-responsive watch-right" alt="not found" src="{{product.image|media_folder_products}}"/></td>
                                 <td>{{ product.short_desc }}</td>
                                 <td>{{ product.description }}</td>
                                 <td>{{ product.price }}</td>

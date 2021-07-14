@@ -19,8 +19,6 @@
                             <th>Имя</th>
                             <th>Фамилия</th>
                             <th>Адрес эл. почты</th>
-{#                            <th>Персонал сайта</th>#}
-{#                            <th>Удален</th>#}
                             <th>Дата последнего входа</th>
                             <th>Удалить</th>
                         </tr>
@@ -32,20 +30,6 @@
                                 <td>{{ user.first_name }}</td>
                                 <td>{{ user.last_name }}</td>
                                 <td>{{ user.email }}</td>
-{#                                <td class="text-center">#}
-{#                                    {% if user.is_staff %}#}
-{#                                        <i class="fa fa-check-circle"></i>#}
-{#                                    {% else %}#}
-{#                                        <i class="fa fa-times-circle"></i>#}
-{#                                    {% endif %}#}
-{#                                </td>#}
-{#                                <td class="text-center">#}
-{#                                    {% if user.is_active %}#}
-{#                                        <i class="fa fa-check-circle"></i>#}
-{#                                    {% else %}#}
-{#                                        <i class="fa fa-times-circle"></i>#}
-{#                                    {% endif %}#}
-{#                                </td>#}
                                 <td>{% if user.last_login != None %}
                                     {{ user.last_login }}
                                     {% else %}
