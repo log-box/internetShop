@@ -1,8 +1,10 @@
 from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
-
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
+from django.utils.decorators import method_decorator
+from django.views.generic import CreateView
+from django.views.generic.list import ListView
 
 from adminapp.forms import ShopUserAdminEditForm, ShopUserAdminRegisterForm, ProductsCategoryEditForm, \
     ProductsCategoryCreateForm, ProductEditForm
@@ -10,32 +12,25 @@ from authapp.models import ShopUser
 from mainapp.models import ProductCategory, Product
 
 
-def user_create(request):
-    title = f'Создание пользователя'
-    if request.method == 'POST':
-        create_form = ShopUserAdminRegisterForm(request.POST, request.FILES)
-        if create_form.is_valid():
-            create_form.save()
-            return HttpResponseRedirect(reverse('admin_stuff:users'))
-    else:
-        create_form = ShopUserAdminRegisterForm()
-    context = {
-        'title': title,
-        'form': create_form,
-    }
-    return render(request, 'adminapp/user_create.html', context)
+class UserCreateView(CreateView):
+    model = ShopUser
+    form_class = ShopUserAdminRegisterForm
+    template_name = 'adminapp/user_create.html'
+    success_url = reverse_lazy('admin_stuff:users')
+
+    def get_context_data(self, **kwargs):
+        context = super(UserCreateView, self).get_context_data()
+        context['title'] = 'Создание пользователя'
+        return context
 
 
-@user_passes_test(lambda u: u.is_superuser)
-def users(request):
-    title = 'Админка/Пользователи'
-    get_users = ShopUser.objects.all()
+class UsersListView(ListView):
+    model = ShopUser
+    template_name = 'adminapp/users.html'
 
-    context = {
-        'title': title,
-        'users': get_users,
-    }
-    return render(request, 'adminapp/users.html', context)
+    @method_decorator(user_passes_test(lambda u: u.is_superuser))
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
 
 
 def user_update(request, pk):
@@ -155,7 +150,6 @@ def products(request, pk):
     else:
         one_product = Product.objects.first()
         title = 'Пустая категория'
-
 
     context = {
         'title': title,

@@ -33,7 +33,7 @@ def basket_add(request, pk):
             basket = Basket(user=request.user, product=product)
         basket.quantity += 1
         basket.save()
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        return HttpResponseRedirect(reverse('mainapp:group_of_products', kwargs={'slug': product.category.href}))
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 

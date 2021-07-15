@@ -24,7 +24,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        {% for user in users %}
+                        {% for user in object_list  %}
                             <tr {% if user.is_deleted %} style="opacity: 0.5;" {% endif %}>
                                 <td><a href="{% url 'admin_stuff:user_update' user.pk %}" style="color: dodgerblue">{{ user.username }}</a></td>
                                 <td>{{ user.first_name }}</td>

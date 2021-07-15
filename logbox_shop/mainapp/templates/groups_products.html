@@ -25,6 +25,19 @@
 					<h2 class="product_category">{{ category.name|title }}</h2>
                 </div>
 				<div class="related-products clearfix ">
+                <h2>Категория: "{{ category.name|title }}"</h2>
+                <div class="paginator">
+                {% if products.has_previous %}
+                    <a href="{% url 'products:page' category.href products.previous_page_number %}"><i class="fa fa-caret-square-o-left" aria-hidden="true"></i></a>
+                {% endif %}
+                <span class="current">
+                    страница {{ products.number }} из  {{ products.paginator.num_pages }}
+                </span>
+                {% if products.has_next %}
+                    <a href="{% url 'products:page' category.href products.next_page_number %}"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i></a>
+                {% endif %}
+                </div>
+
                     {% for item in products %}
                         <div class="block">
                             <a href="{% url 'products:product' item.pk  %}" ><img src="{{ item.image|media_folder_products }}" alt="img" class="prod_img_370" >
