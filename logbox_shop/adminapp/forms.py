@@ -52,17 +52,21 @@ class ProductsCategoryEditForm(ModelForm):
 
     @staticmethod
     def check_for_symbols(string):
-        symbols = ["_", "-", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
+        sign = True
+        symbols = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
+                   'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '_', '-']
         for one_char in string:
-            if one_char in symbols:
-                return True
-        return False
+            if one_char.lower() not in symbols:
+                sign = False
+        return sign
 
     def clean_href(self):
         href = self.cleaned_data['href']
         if href == '':
             raise forms.ValidationError("Ссылка обязательно нужна")
-        if self.check_for_russian(href) == False or self.check_for_symbols(href) == False:
+        if self.check_for_russian(href) is False:
+            raise forms.ValidationError('Допускаются только латинские символы и знаки ("_" "-") и цифры "0-9"')
+        if self.check_for_symbols(href) is False:
             raise forms.ValidationError('Допускаются только латинские символы и знаки ("_" "-") и цифры "0-9"')
         return href
 
@@ -83,17 +87,21 @@ class ProductsCategoryCreateForm(forms.ModelForm):
 
     @staticmethod
     def check_for_symbols(string):
-        symbols = ["_", "-", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
+        sign = True
+        symbols = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
+                   'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '_', '-']
         for one_char in string:
-            if one_char in symbols:
-                return True
-        return False
+            if one_char.lower() not in symbols:
+                sign = False
+        return sign
 
     def clean_href(self):
         href = self.cleaned_data['href']
         if href == '':
             raise forms.ValidationError("Ссылка обязательно нужна")
-        if self.check_for_russian(href) == False or self.check_for_symbols(href) == False:
+        if self.check_for_russian(href) is False:
+            raise forms.ValidationError('Допускаются только латинские символы и знаки ("_" "-") и цифры "0-9"')
+        if self.check_for_symbols(href) is False:
             raise forms.ValidationError('Допускаются только латинские символы и знаки ("_" "-") и цифры "0-9"')
         return href
 
@@ -102,4 +110,3 @@ class ProductEditForm(ModelForm):
     class Meta:
         model = Product
         fields = '__all__'
-

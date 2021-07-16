@@ -1,66 +1,59 @@
 from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
+from django.utils.decorators import method_decorator
+from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 
 from adminapp.forms import ProductsCategoryCreateForm, ProductsCategoryEditForm
 from mainapp.models import ProductCategory
 
 
-def category_create(request):
-    title = f'Создание категории продуктов'
-    if request.method == 'POST':
-        create_form = ProductsCategoryCreateForm(request.POST)
-        if create_form.is_valid():
-            create_form.save()
-            return HttpResponseRedirect(reverse('admin_stuff:categories'))
-    else:
-        create_form = ProductsCategoryCreateForm()
-    context = {
-        'title': title,
-        'create_form': create_form,
-    }
-    return render(request, 'adminapp/category_create.html', context)
+class CategoryCreateView(CreateView):
+    model = ProductCategory
+    form_class = ProductsCategoryCreateForm
+    template_name = 'adminapp/category_create.html'
+    success_url = reverse_lazy('admin_stuff:categories')
+
+    def get_context_data(self, **kwargs):
+        context = super(CategoryCreateView, self).get_context_data()
+        context['title'] = 'Создание категории продуктов'
+        return context
 
 
-@user_passes_test(lambda u: u.is_superuser)
-def categories(request):
-    title = 'Админка/Категории'
-    get_categories = ProductCategory.objects.all()
+class CategoryListView(ListView):
+    model = ProductCategory
+    template_name = 'adminapp/categories.html'
 
-    context = {
-        'title': title,
-        'categories': get_categories,
-    }
-    return render(request, 'adminapp/categories.html', context)
+    @method_decorator(user_passes_test(lambda u: u.is_superuser))
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
 
 
-def category_update(request, pk):
-    category = get_object_or_404(ProductCategory, pk=pk)
-    title = f'Редактировние {category.name}'
-    if request.method == 'POST':
-        edit_form = ProductsCategoryEditForm(request.POST, instance=category)
-        if edit_form.is_valid():
-            edit_form.save()
-            return HttpResponseRedirect(reverse('admin_stuff:categories'))
-    else:
-        edit_form = ProductsCategoryEditForm(instance=category)
-    context = {
-        'title': title,
-        'edit_form': edit_form,
-    }
-    return render(request, 'adminapp/category_update.html', context)
+class CategoryUpdateView(UpdateView):
+    model = ProductCategory
+    template_name = 'adminapp/category_update.html'
+    success_url = reverse_lazy('admin_stuff:categories')
+    form_class = ProductsCategoryEditForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = f'категории/редактирование {self.object.name}'
+        return context
 
 
-def category_delete(request, pk):
-    category = get_object_or_404(ProductCategory, pk=pk)
-    title = f'Удаление {category.name}'
-    if request.method == 'POST':
-        category.is_deleted = True
-        category.save()
-        return HttpResponseRedirect(reverse('admin_stuff:categories'))
-    context = {
-        'title': title,
-        'category': category,
-    }
-    return render(request, 'adminapp/category_delete.html', context)
+class CategoryDeleteView(DeleteView):
+    model = ProductCategory
+    template_name = 'adminapp/category_delete.html'
+    success_url = reverse_lazy('admin_stuff:categories')
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.is_deleted = True
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = f'Удаление  {self.object.name}'
+        return context
