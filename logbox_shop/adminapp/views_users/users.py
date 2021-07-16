@@ -1,9 +1,8 @@
 from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
-from django.views.generic import UpdateView, ListView, CreateView
+from django.views.generic import UpdateView, ListView, CreateView, DeleteView
 
 from adminapp.forms import ShopUserAdminRegisterForm
 from authapp.models import ShopUser
@@ -38,19 +37,22 @@ class UserUpdateView(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Редактирование пользователя ' + str(ShopUser.objects.get(username=self.request.user.username))
+        context['title'] = f'Редактирование пользователя {self.object.username}'
         return context
 
 
-def user_delete(request, pk):
-    user = get_object_or_404(ShopUser, pk=pk)
-    title = f'Удаление {user.username}'
-    if request.method == 'POST':
-        user.is_deleted = True
-        user.save()
-        return HttpResponseRedirect(reverse('admin_stuff:users'))
-    context = {
-        'title': title,
-        'user': user,
-    }
-    return render(request, 'adminapp/user_delete.html', context)
+class UserDeleteView(DeleteView):
+    model = ShopUser
+    template_name = 'adminapp/user_delete.html'
+    success_url = reverse_lazy('admin_stuff:users')
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.is_deleted = True
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = f'Удаление пользователя {self.object.username}'
+        return context
