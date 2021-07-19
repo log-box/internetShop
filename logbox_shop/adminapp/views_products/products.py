@@ -3,56 +3,56 @@ from django.shortcuts import render, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView
 
-from mainapp.models import ProductCategory, Product
 from adminapp.forms import ProductEditForm
+from mainapp.models import ProductCategory, Product
+
+
+# вычисляю pk товара, для формирования обратных адресов на текущую категорию товара
+def get_pk(self):
+    if len(Product.objects.filter(category_id=self.kwargs.get('pk'))) > 0:
+        return Product.objects.filter(category_id=self.kwargs.get('pk'))
+    else:
+        return {'category': ProductCategory.objects.get(id=self.kwargs.get("pk")),
+                'pk': ProductCategory.objects.get(id=self.kwargs.get("pk")).pk},
+###################################################################################
 
 
 class ProductCreateView(CreateView):
     model = Product
     form_class = ProductEditForm
     template_name = 'adminapp/product_create.html'
-    success_url = reverse_lazy('admin_stuff:products', kwargs={'pk': model.category})
+    success_url = reverse_lazy('admin_stuff:products')
+
+    def get_success_url(self):
+        return reverse_lazy('admin_stuff:products',
+                            kwargs={'pk': ProductCategory.objects.get(id=self.kwargs.get("pk")).pk})
+
+    def get_initial(self):
+        initial = super(ProductCreateView, self).get_initial()
+        initial['category'] = get_object_or_404(ProductCategory, pk=self.kwargs.get('pk'))
+        initial['price'] = ''
+        initial['quantity'] = ''
+        return initial
 
     def get_context_data(self, **kwargs):
-        context = super(ProductCreateView, self).get_context_data()
+        context = super().get_context_data(**kwargs)
         context['title'] = 'Создание нового продукта'
+        context['product'] = get_pk(self)
         return context
 
 
-# def product_create(request, pk):
-#     title = f'Создание нового продукта'
-#     product = Product.objects.filter(category_id=pk)[0]
-#     category = get_object_or_404(ProductCategory, pk=pk)
-#     if request.method == 'POST':
-#         create_form = ProductEditForm(request.POST, request.FILES)
-#         if create_form.is_valid():
-#             create_form.save()
-#             return HttpResponseRedirect(reverse('admin_stuff:products', kwargs={'pk': product.category.pk}))
-#     else:
-#         create_form = ProductEditForm(initial={'category': category})
-#     context = {
-#         'title': title,
-#         'create_form': create_form,
-#         'product': product,
-#     }
-#     return render(request, 'adminapp/product_create.html', context)
+class ProductsCreateView(CreateView):
+    model = Product
+    template_name = 'adminapp/products.html'
+    form_class = ProductEditForm
+    context_object_name = 'product'
 
-
-def products(request, pk):
-    products = Product.objects.filter(category_id=pk)
-    if len(products) > 0:
-        one_product = Product.objects.filter(category_id=pk)[0]
-        title = f'Товары категории "{one_product.category}"'
-    else:
-        one_product = Product.objects.first()
-        title = 'Пустая категория'
-
-    context = {
-        'title': title,
-        'products': products,
-        'prod': one_product,
-    }
-    return render(request, 'adminapp/products.html', context)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = f'Товары категории "{ProductCategory.objects.filter(id=self.kwargs.get("pk"))}"'
+        context['object_list'] = Product.objects.filter(category_id=self.kwargs.get('pk'))
+        context['prod'] = get_pk(self)
+        return context
 
 
 def product_read(request, pk):
@@ -69,7 +69,7 @@ def product_update(request, pk):
     product = get_object_or_404(Product, pk=pk)
     title = f'Редактировние {product.name}'
     if request.method == 'POST':
-        edit_form = ProductEditForm(request.POST, instance=product)
+        edit_form = ProductEditForm(request.POST, request.FILES, instance=product)
         if edit_form.is_valid():
             edit_form.save()
             return HttpResponseRedirect(reverse('admin_stuff:products', kwargs={'pk': product.category.pk}))

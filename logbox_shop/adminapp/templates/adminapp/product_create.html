@@ -9,7 +9,7 @@
             <input class="form-control" type="submit" value="создать">
         </form>
         <button class="btn btn-round form-control last">
-            <a href="{% url 'admin_stuff:products' %}" class="">
+            <a href="{% url 'admin_stuff:products' product.0.category.pk %}" class="">
                 назад
             </a>
         </button>

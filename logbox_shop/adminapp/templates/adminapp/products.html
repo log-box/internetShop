@@ -4,11 +4,11 @@
 {% block content %}
 <main>
     <div class="container-fluid">
-        <h1 class="mt-4">{% if title != 'Пустая категория' %}Товары категории "{{ prod.category|title }}" {% else %} В категории нет товаров {% endif %} </h1>
+        <h1 class="mt-4">Товары категории {{ prod.0.category|title }} </h1>
         <div class="card mb-4">
             <div class="card-header">
                 <i class="fas  mr-1"></i>
-                {% if title != 'Пустая категория' %} {{ prod.category|title }} {% else %} {% endif %}
+                {{ prod.0.category|title }}
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -26,8 +26,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        {% for product in products %}
-
+                        {% for product in object_list %}
                             <tr {% if product.is_deleted %} style="opacity: 0.5;" {% endif %}>
                                 <td>
                                     <a href="{% url 'admin_stuff:product_read' product.pk %}">
@@ -57,7 +56,7 @@
                 </div>
             </div>
             <div class="card-footer">
-                <a href="{% url 'admin_stuff:product_create' prod.category.pk %}">
+                <a href="{% url 'admin_stuff:product_create' prod.0.category.pk %}">
                     <button class="btn btn-success">Создать новый товар</button>
                 </a>
                 <a href="{% url 'admin_stuff:categories' %}">
