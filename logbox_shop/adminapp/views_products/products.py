@@ -1,29 +1,41 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
-from django.urls import reverse
-
+from django.urls import reverse, reverse_lazy
+from django.views.generic import CreateView
 
 from mainapp.models import ProductCategory, Product
 from adminapp.forms import ProductEditForm
 
 
-def product_create(request, pk):
-    title = f'Создание нового продукта'
-    product = Product.objects.filter(category_id=pk)[0]
-    category = get_object_or_404(ProductCategory, pk=pk)
-    if request.method == 'POST':
-        create_form = ProductEditForm(request.POST, request.FILES)
-        if create_form.is_valid():
-            create_form.save()
-            return HttpResponseRedirect(reverse('admin_stuff:products', kwargs={'pk': product.category.pk}))
-    else:
-        create_form = ProductEditForm(initial={'category': category})
-    context = {
-        'title': title,
-        'create_form': create_form,
-        'product': product,
-    }
-    return render(request, 'adminapp/product_create.html', context)
+class ProductCreateView(CreateView):
+    model = Product
+    form_class = ProductEditForm
+    template_name = 'adminapp/product_create.html'
+    success_url = reverse_lazy('admin_stuff:products', kwargs={'pk': model.category})
+
+    def get_context_data(self, **kwargs):
+        context = super(ProductCreateView, self).get_context_data()
+        context['title'] = 'Создание нового продукта'
+        return context
+
+
+# def product_create(request, pk):
+#     title = f'Создание нового продукта'
+#     product = Product.objects.filter(category_id=pk)[0]
+#     category = get_object_or_404(ProductCategory, pk=pk)
+#     if request.method == 'POST':
+#         create_form = ProductEditForm(request.POST, request.FILES)
+#         if create_form.is_valid():
+#             create_form.save()
+#             return HttpResponseRedirect(reverse('admin_stuff:products', kwargs={'pk': product.category.pk}))
+#     else:
+#         create_form = ProductEditForm(initial={'category': category})
+#     context = {
+#         'title': title,
+#         'create_form': create_form,
+#         'product': product,
+#     }
+#     return render(request, 'adminapp/product_create.html', context)
 
 
 def products(request, pk):
