@@ -5,15 +5,15 @@
 {% block content %}
 
     <div class="card" style="width: 18rem;">
-        <h2>Товар из категории: {{ product.category|title }}</h2>
-        <img src="{{product.image|media_folder_products}}" class="card-img-top" alt="not found img">
+        <h2>Товар из категории: {{ object.category|title }}</h2>
+        <img src="{{object.image|media_folder_products}}" class="card-img-top" alt="not found img">
     <div class="card-body">
-    <h5 class="card-title">{{ product.name }}</h5>
-    <p class="card-text">{{ product.description }}</p>
-    <p class="card-text">Цена:{{ product.price }}руб.</p>
-    <p class="card-text">Остаток:{{ product.quantity }}шт.</p>
-    <p class="card-text"> {{ product.short_desc }}</p>
-    <a href="{% url 'admin_stuff:products' product.category.pk %}" class="btn btn-primary">Назад</a>
+    <h5 class="card-title">{{ object.name }}</h5>
+    <p class="card-text">{{ object.description }}</p>
+    <p class="card-text">Цена:{{ object.price }}руб.</p>
+    <p class="card-text">Остаток:{{ object.quantity }}шт.</p>
+    <p class="card-text"> {{ object.short_desc }}</p>
+    <a href="{% url 'admin_stuff:products' object.category.pk %}" class="btn btn-primary">Назад</a>
     </div>
     </div>
 
