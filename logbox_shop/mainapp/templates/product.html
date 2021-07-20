@@ -15,21 +15,21 @@
         <div class="details-products">
             <div class="details-slider">
                 <div class="slider-product">
-                    <img src="{{ product.image|media_folder_products }}">
+                    <img src="{{ product.0.image|media_folder_products }}">
                 </div>
                 <div class="slider-control">
                     <div class="block">
-                        <a href="#"><img src="{{ product.image|media_folder_products }}" alt="">
+                        <a href="#"><img src="{{ product.0.image|media_folder_products }}" alt="">
                             <div class="text"></div>
                         </a>
                     </div>
                     <div class="block">
-                        <a href="#"><img src="{{ product.image|media_folder_products }}" alt="">
+                        <a href="#"><img src="{{ product.0.image|media_folder_products }}" alt="">
                             <div class="text"></div>
                         </a>
                     </div>
                     <div class="block">
-                        <a href="#"><img src="{{ product.image|media_folder_products }}" alt="">
+                        <a href="#"><img src="{{ product.0.image|media_folder_products }}" alt="">
                             <div class="text"></div>
                         </a>
                     </div>
@@ -38,12 +38,12 @@
             <div class="description">
                 <h3 class="big-bold">{{ product.name}}</h3>
                 <h3 class="red">горячее предложение</h3>
-                <p class="price">{{product.price}}<span>руб</span></p>
-                <a href="{% url 'basket:add' product.pk %}" class="red-button">
+                <p class="price">{{product.0.price}}<span>руб</span></p>
+                <a href="{% url 'basket:add' product.0.pk %}" class="red-button">
                     заказать <i class="fa fa-chevron-right" aria-hidden="true"></i>
                 </a>
                 <div class="description-text">
-                    {{ product.description }}
+                    {{ product.0.description }}
                 </div>
             </div>
         </div>

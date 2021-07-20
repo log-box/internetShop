@@ -27,14 +27,14 @@
 				<div class="related-products clearfix ">
                 <h2>Категория: "{{ category.name|title }}"</h2>
                 <div class="paginator">
-                {% if products.has_previous %}
-                    <a href="{% url 'products:page' category.href products.previous_page_number %}"><i class="fa fa-caret-square-o-left" aria-hidden="true"></i></a>
+                {% if page_obj.has_previous %}
+                    <a href="{% url 'products:page' category.href page_obj.previous_page_number %}"><i class="fa fa-caret-square-o-left" aria-hidden="true"></i></a>
                 {% endif %}
                 <span class="current">
-                    страница {{ products.number }} из  {{ products.paginator.num_pages }}
+                    страница {{ page_obj.number }} из  {{ page_obj.paginator.num_pages }}
                 </span>
-                {% if products.has_next %}
-                    <a href="{% url 'products:page' category.href products.next_page_number %}"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i></a>
+                {% if page_obj.has_next %}
+                    <a href="{% url 'products:page' category.href page_obj.next_page_number %}"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i></a>
                 {% endif %}
                 </div>
 
