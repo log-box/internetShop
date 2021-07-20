@@ -2,6 +2,9 @@ import random
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render, get_object_or_404
+from django.views import View
+from django.views.generic import DetailView
+from django.views.generic.base import ContextMixin, TemplateResponseMixin, TemplateView
 
 from basketapp.models import Basket
 from logbox_shop.views import getjson
@@ -21,6 +24,20 @@ def get_hot_product():
 
 def get_same_products(hot_product):
     return Product.objects.filter(category=hot_product.category).exclude(pk=hot_product.pk)[:3]
+
+
+class ProductsView(TemplateView):
+    template_name = 'products.html'
+
+    def get_context_data(self, **kwargs):
+        extra_context = super().get_context_data(**kwargs)
+        extra_context['general_menu_links'] = getjson('general_menu_links')
+        extra_context['title'] = 'Магазин/Продукция'
+        extra_context['general_menu_links'] = ProductCategory.objects.all()
+        extra_context['same_products'] = get_same_products(get_hot_product())
+        extra_context['hot_product'] = get_hot_product()
+        extra_context['basket'] = get_basket(self.request.user)
+        return extra_context
 
 
 def products(request):
