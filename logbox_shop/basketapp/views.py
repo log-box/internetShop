@@ -31,7 +31,6 @@ class BasketView(ListView):
 
 
 class BasketAddView(View):
-
     @method_decorator(user_passes_test(lambda u: u.is_authenticated))
     def dispatch(self, request, *args, **kwargs):
         super().dispatch(request, *args, **kwargs)

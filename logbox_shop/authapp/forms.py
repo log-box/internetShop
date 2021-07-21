@@ -1,3 +1,6 @@
+import hashlib
+import random
+
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
 
@@ -33,6 +36,15 @@ class ShopUserRegisterForm(UserCreationForm):
             raise forms.ValidationError('Вы слишком молоды для данного сайта')
         if self.cleaned_data['email'].split('.')[1].lower() != 'ru':
             raise forms.ValidationError('При первичной регистрации почта может быть только Российской')
+
+    def save(self):
+        user = super().save()
+        user.is_active = False
+        salt = hashlib.sha1(str(random.random()).encode('utf8')).hexdigest()[:6]
+        user.activation_key = hashlib.sha1(str(user.email + salt).encode('utf8')).hexdigest()
+        user.save()
+        return user
+
 
 
 class ShopUserEditForm(UserChangeForm):

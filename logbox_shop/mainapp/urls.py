@@ -1,6 +1,4 @@
 from django.urls import path
-
-import mainapp.models
 from .views import *
 
 app_name = 'mainapp'
