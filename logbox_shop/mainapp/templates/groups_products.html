@@ -13,7 +13,7 @@
     </div>
     <div class="details ">
         {%  include 'mainapp/includes/inc_category_menu.html' %}
-        <div class="details-products" style="padding-left: 0px;padding-right: 0px;margin-top: 0px;height: 0px;">
+        <div class="details-products" style="padding-left: 98px;padding-right: 98px;margin-top: 98px;height: 1px;">
         </div>
 {#        <div class="related">#}
           <div class="clr">
@@ -28,6 +28,7 @@
             {% endif %}
             <span class="current">
                 страница {{ page_obj.number }} из  {{ page_obj.paginator.num_pages }}
+
             </span>
             {% if page_obj.has_next %}
                 <a href="{% url 'products:page' category.href page_obj.next_page_number %}"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i></a>
@@ -36,6 +37,7 @@
 
                 {% for item in products %}
                     <div class="block">
+                    <br>
                         <a href="{% url 'products:product' item.pk  %}" ><img src="{{ item.image|media_folder_products }}" alt="img" class="prod_img_370" >
                             <div class="text">
                                 <img src="{% static 'logbox_shop/img/icon-hover.png' %}" alt="img">
