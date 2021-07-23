@@ -1,11 +1,12 @@
 from django.contrib import auth
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, LogoutView
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, resolve_url
 from django.urls import reverse, reverse_lazy
+from django.views.generic import UpdateView, CreateView
 
-from authapp.forms import ShopUserLoginForm, ShopUserRegisterForm, ShopUserEditForm
+from authapp.forms import ShopUserLoginForm, ShopUserRegisterForm
 from authapp.models import ShopUser
 from logbox_shop import settings
 
@@ -29,8 +30,14 @@ def verify(request, email, activation_key):
             auth.login(request, user)
             return render(request, 'authapp/verification.html')
         else:
+            err = f'error activation user {user.username}. Истек срок активации или ссылка была скоппроментирована' \
+                  f'повторите регистрацию'
             print(f'error activation user {user.username}')
-            return render(request, 'authapp/verification.html')
+            context = {
+                'err': err,
+            }
+            user.delete()
+            return render(request, 'authapp/verification.html', context)
     except Exception as err:
         print(f'error activation user: {err.args}')
         return HttpResponseRedirect(reverse('index'))
@@ -42,70 +49,64 @@ class ShopLoginView(LoginView):
 
     def get_success_url(self):
         if 'next' in self.request.POST.keys():
-            return reverse_lazy(self.request.POST['next'])
+            return resolve_url(self.request.POST['next'])
         else:
             return reverse_lazy('index')
 
 
-# def login(request):
-#     title = 'Вход в магазин'
-#     login_form = ShopUserLoginForm(data=request.POST)
-#     _next = request.GET['next'] if 'next' in request.GET.keys() else ''
-#     if request.POST and login_form.is_valid():
-#         username = request.POST['username']
-#         password = request.POST['password']
-#         user = auth.authenticate(username=username, password=password)
-#         if user and user.is_active:
-#             auth.login(request, user)
-#             if 'next' in request.POST.keys():
-#                 return HttpResponseRedirect(request.POST['next'])
-#             else:
-#                 return HttpResponseRedirect(reverse('index'))
-#     context = {
-#         'title': title,
-#         'login_form': login_form,
-#         'next': _next,
-#     }
-#     return render(request, 'authapp/login.html', context)
+class ShopLogoutView(LogoutView):
+    template_name = None
 
 
-def logout(request):
-    auth.logout(request)
-    return HttpResponseRedirect(reverse('index'))
+class ShopRegisterView(CreateView):
+    model = ShopUser
+    form_class = ShopUserRegisterForm
+    template_name = 'authapp/register.html'
+    success_url = reverse_lazy('auth:login')
 
+    def get_context_data(self, **kwargs):
+        context = super(ShopRegisterView, self).get_context_data()
+        context['title'] = 'Регистрация нового пользователя'
+        return context
 
-def register(request):
-    title = 'регистрация'
-    if request.method == 'POST':
-        register_form = ShopUserRegisterForm(request.POST, request.FILES)
-        if register_form.is_valid():
-            user = register_form.save()
+    def post(self, request, **kwargs):
+        self.object = ShopUser()
+        form_class = self.get_form_class()
+        form = super().get_form(form_class)
+        if form.is_valid():
+            user = form.save()
             if send_verify_email(user):
                 print('Письмо отправлено')
                 return HttpResponseRedirect(reverse('auth:login'))
             else:
                 print('Письмо не отправлено')
                 return HttpResponseRedirect(reverse('auth:login'))
-    else:
-        register_form = ShopUserRegisterForm()
-    context = {
-        'title': title,
-        'register_form': register_form
-    }
-    return render(request, 'authapp/register.html', context)
+        else:
+            return self.form_invalid(form)
 
 
-def edit(request):
-    title = 'редактирование'
-    if request.method == 'POST':
-        edit_form = ShopUserEditForm(request.POST, request.FILES, instance=request.user)
-        if edit_form.is_valid():
-            edit_form.save()
-            return HttpResponseRedirect(reverse('auth:edit'))
-    else:
-        edit_form = ShopUserEditForm(instance=request.user)
-    context = {
-        'title': title,
-        'edit_form': edit_form
-    }
-    return render(request, 'authapp/edit.html', context)
+class ShopUpdateView(UpdateView):
+    # model = ShopUser
+    template_name = 'authapp/edit.html'
+    success_url = reverse_lazy('auth:edit')
+    fields = ('first_name', 'email', 'age', 'avatar')
+
+    def get(self, request, **kwargs):
+        self.object = ShopUser.objects.get(username=self.request.user)
+        context = self.get_context_data(object=self.object)
+        return self.render_to_response(context)
+
+    def post(self, request, **kwargs):
+        self.object = ShopUser.objects.get(username=self.request.user)
+        form_class = self.get_form_class()
+        form = super().get_form(form_class)
+        if form.is_valid():
+            form.save()
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = f'Редактирование пользователя {self.object.username}'
+        return context
