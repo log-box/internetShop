@@ -1,8 +1,9 @@
 from django.contrib import auth
+from django.contrib.auth.views import LoginView
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 
 from authapp.forms import ShopUserLoginForm, ShopUserRegisterForm, ShopUserEditForm
 from authapp.models import ShopUser
@@ -35,26 +36,37 @@ def verify(request, email, activation_key):
         return HttpResponseRedirect(reverse('index'))
 
 
-def login(request):
-    title = 'Вход в магазин'
-    login_form = ShopUserLoginForm(data=request.POST)
-    _next = request.GET['next'] if 'next' in request.GET.keys() else ''
-    if request.POST and login_form.is_valid():
-        username = request.POST['username']
-        password = request.POST['password']
-        user = auth.authenticate(username=username, password=password)
-        if user and user.is_active:
-            auth.login(request, user)
-            if 'next' in request.POST.keys():
-                return HttpResponseRedirect(request.POST['next'])
-            else:
-                return HttpResponseRedirect(reverse('index'))
-    context = {
-        'title': title,
-        'login_form': login_form,
-        'next': _next,
-    }
-    return render(request, 'authapp/login.html', context)
+class ShopLoginView(LoginView):
+    template_name = 'authapp/login.html'
+    authentication_form = ShopUserLoginForm
+
+    def get_success_url(self):
+        if 'next' in self.request.POST.keys():
+            return reverse_lazy(self.request.POST['next'])
+        else:
+            return reverse_lazy('index')
+
+
+# def login(request):
+#     title = 'Вход в магазин'
+#     login_form = ShopUserLoginForm(data=request.POST)
+#     _next = request.GET['next'] if 'next' in request.GET.keys() else ''
+#     if request.POST and login_form.is_valid():
+#         username = request.POST['username']
+#         password = request.POST['password']
+#         user = auth.authenticate(username=username, password=password)
+#         if user and user.is_active:
+#             auth.login(request, user)
+#             if 'next' in request.POST.keys():
+#                 return HttpResponseRedirect(request.POST['next'])
+#             else:
+#                 return HttpResponseRedirect(reverse('index'))
+#     context = {
+#         'title': title,
+#         'login_form': login_form,
+#         'next': _next,
+#     }
+#     return render(request, 'authapp/login.html', context)
 
 
 def logout(request):
