@@ -6,7 +6,7 @@ from django.shortcuts import render, resolve_url
 from django.urls import reverse, reverse_lazy
 from django.views.generic import UpdateView, CreateView
 
-from authapp.forms import ShopUserLoginForm, ShopUserRegisterForm
+from authapp.forms import ShopUserLoginForm, ShopUserRegisterForm, ShopUserEditForm
 from authapp.models import ShopUser
 from logbox_shop import settings
 
@@ -71,8 +71,8 @@ class ShopRegisterView(CreateView):
 
     def post(self, request, **kwargs):
         self.object = ShopUser()
-        form_class = self.get_form_class()
-        form = super().get_form(form_class)
+        # form_class = self.get_form_class()
+        form = super().get_form(self.form_class)
         if form.is_valid():
             user = form.save()
             if send_verify_email(user):
@@ -89,7 +89,9 @@ class ShopUpdateView(UpdateView):
     # model = ShopUser
     template_name = 'authapp/edit.html'
     success_url = reverse_lazy('auth:edit')
-    fields = ('first_name', 'email', 'age', 'avatar')
+    # fields = ('username', 'first_name', 'email', 'age', 'avatar')
+
+    form_class = ShopUserEditForm
 
     def get(self, request, **kwargs):
         self.object = ShopUser.objects.get(username=self.request.user)
@@ -98,7 +100,7 @@ class ShopUpdateView(UpdateView):
 
     def post(self, request, **kwargs):
         self.object = ShopUser.objects.get(username=self.request.user)
-        form_class = self.get_form_class()
+        form_class = ShopUserEditForm
         form = super().get_form(form_class)
         if form.is_valid():
             form.save()

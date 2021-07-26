@@ -5,6 +5,8 @@ from django.db import models
 
 
 # Create your models here.
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.utils.timezone import now
 
 
@@ -17,6 +19,7 @@ class ShopUser(AbstractUser):
     age = models.PositiveIntegerField(
         verbose_name='возраст',
         null=True,
+        blank=True,
     )
 
     email = models.EmailField(
@@ -35,4 +38,48 @@ class ShopUser(AbstractUser):
         else:
             return True
 
+class ShopUserProfile(models.Model):
+    MALE = 'M'
+    FEMALE = 'W'
 
+    GENDER_CHOISE = (
+        (MALE, 'М'),
+        (FEMALE, 'Ж'),
+    )
+
+    user = models.OneToOneField(
+        ShopUser,
+        unique=True,
+        blank=False,
+        db_index=True,
+        on_delete=models.CASCADE,
+    )
+
+    tagline = models.CharField(
+        verbose_name='теги',
+        max_length=128,
+        blank=True,
+    )
+
+    about_me = models.TextField(
+        verbose_name='о себе',
+        max_length=512,
+        blank=True,
+    )
+
+    gender = models.CharField(
+        verbose_name='',
+        max_length=1,
+        choices=GENDER_CHOISE,
+        blank=True,
+    )
+
+    @receiver(post_save, sender=ShopUser)
+    def create_user_profiler(sender, instance, created, **kwargs):
+        if created:
+            ShopUserProfile.objects.create(user=instance)
+
+    @receiver(post_save, sender=ShopUser)
+    def save_user_profiler(sender, instance, **kwargs):
+        instance.shopuserprofile.save()
+        
