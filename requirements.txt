@@ -5,3 +5,4 @@ sqlparse==0.4.1
 Pillow
 social_auth_app_django
 django-environ
+requests

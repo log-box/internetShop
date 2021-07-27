@@ -1,14 +1,16 @@
 from django.contrib import auth
 from django.contrib.auth.views import LoginView, LogoutView
 from django.core.mail import send_mail
+from django.db import transaction
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, resolve_url
 from django.urls import reverse, reverse_lazy
 from django.views.generic import UpdateView, CreateView
 
-from authapp.forms import ShopUserLoginForm, ShopUserRegisterForm, ShopUserEditForm
+from authapp.forms import ShopUserLoginForm, ShopUserRegisterForm, ShopUserEditForm, ShopUserProfileEditForm
 from authapp.models import ShopUser
 from logbox_shop import settings
+
 
 
 def send_verify_email(user):
@@ -71,7 +73,6 @@ class ShopRegisterView(CreateView):
 
     def post(self, request, **kwargs):
         self.object = ShopUser()
-        # form_class = self.get_form_class()
         form = super().get_form(self.form_class)
         if form.is_valid():
             user = form.save()
@@ -86,29 +87,29 @@ class ShopRegisterView(CreateView):
 
 
 class ShopUpdateView(UpdateView):
-    # model = ShopUser
     template_name = 'authapp/edit.html'
     success_url = reverse_lazy('auth:edit')
-    # fields = ('username', 'first_name', 'email', 'age', 'avatar')
 
     form_class = ShopUserEditForm
+    profile_form_class = ShopUserProfileEditForm
 
-    def get(self, request, **kwargs):
-        self.object = ShopUser.objects.get(username=self.request.user)
-        context = self.get_context_data(object=self.object)
-        return self.render_to_response(context)
-
+    @transaction.atomic
     def post(self, request, **kwargs):
-        self.object = ShopUser.objects.get(username=self.request.user)
-        form_class = ShopUserEditForm
-        form = super().get_form(form_class)
-        if form.is_valid():
+        self.object = self.get_object()
+        form = super().get_form(self.form_class)
+        form2 = self.profile_form_class(request.POST, instance=self.object.shopuserprofile)
+        if form.is_valid() and form2.is_valid():
             form.save()
-            return self.form_valid(form)
+            return HttpResponseRedirect(self.success_url)
         else:
-            return self.form_invalid(form)
+            return self.render_to_response(self.get_context_data())
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = f'Редактирование пользователя {self.object.username}'
+        context['form2'] = self.profile_form_class(instance=self.object.shopuserprofile)
         return context
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
