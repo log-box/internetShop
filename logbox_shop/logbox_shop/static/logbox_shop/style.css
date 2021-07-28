@@ -874,6 +874,11 @@ td:first-child {
 	list-style-type: none;
 	padding-right: 42px;
 }
+
+
+
+
+
 .links-menu li a {
 	text-decoration: none;
 	color:  #6c6c6c;
@@ -1071,5 +1076,10 @@ td:first-child {
 .index_img{
 	width: 270px;
 	height: 270px;
+}
+
+ .dropdown-item:hover {
+    color: #1e2125;
+    background-color: #d9dee1;
 }
 

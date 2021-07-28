@@ -14,7 +14,7 @@ def index(request):
     title = 'магазин/главная'
     products = Product.objects.all()[:3]
     context = {
-        'general_menu_links': getjson('general_menu_links'),
+        # 'general_menu_links': getjson('general_menu_links'),
         'title': title,
         'products': products,
     }
@@ -24,7 +24,7 @@ def index(request):
 def contacts(request):
     title = 'магазин/контакты'
     context = {
-        'general_menu_links': getjson('general_menu_links'),
+        # 'general_menu_links': getjson('general_menu_links'),
         'title': title,
     }
     return render(request, 'contact.html', context)

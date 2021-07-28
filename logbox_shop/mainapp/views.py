@@ -23,7 +23,7 @@ class ProductsView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['general_menu_links'] = getjson('general_menu_links')
+        # context['general_menu_links'] = getjson('general_menu_links')
         context['title'] = 'Магазин/Продукция'
         context['products_category_menu'] = ProductCategory.objects.all()
         context['same_products'] = get_same_products(get_hot_product())
@@ -37,7 +37,7 @@ class ProductView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = f'Продукты/{(get_object_or_404(Product, pk=self.kwargs.get("pk"))).short_desc}'
-        context['general_menu_links'] = getjson('general_menu_links')
+        # context['general_menu_links'] = getjson('general_menu_links')
         context['products_category_menu'] = ProductCategory.objects.all()
         context['product'] = get_object_or_404(Product, pk=self.kwargs.get("pk")),
         return context
@@ -50,7 +50,7 @@ class GroupProductsView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['general_menu_links'] = getjson('general_menu_links')
+        # context['general_menu_links'] = getjson('general_menu_links')
         context['products_category_menu'] = ProductCategory.objects.all()
         if self.kwargs.get('slug') == 'products_all':
             category = {

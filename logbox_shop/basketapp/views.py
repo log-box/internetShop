@@ -19,7 +19,7 @@ class BasketView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['general_menu_links'] = getjson('general_menu_links')
+        # context['general_menu_links'] = getjson('general_menu_links')
         return context
 
     def get_queryset(self):
