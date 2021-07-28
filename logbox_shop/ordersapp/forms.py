@@ -15,7 +15,7 @@ class OrderForm(forms.ModelForm):
 
 class OrderItemForm(forms.ModelForm):
     class Meta:
-        model = Order
+        model = OrderItem
         exclude = ('user',)
 
     def __init__(self, *args, **kwargs):
