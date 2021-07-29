@@ -1,5 +1,5 @@
 {% load my_tags %}
-<div class="container" style="margin-top: 50px">
+<div class="container basket_list" style="margin-top: 50px">
                 <div class="row" style="margin-top: 50px">
 
                     <table class="table">
@@ -21,11 +21,7 @@
                               <th scope="row">{{ forloop.counter }}</th>
                               <td><a><img src="{{ item.product.image|media_folder_products }}" alt="" height="50" width="50"></a></td>
                               <td>{{ item.product }}</td>
-                              <td><input type="number"
-                                    name="{{ item.pk }}"
-                                    min="0"
-                                    value="{{ item.quantity }}">
-                              </td>
+                              <td><input type="number" name="{{ item.pk }}" min="0" value="{{ item.quantity }}"> </td>
                               <td>{{ item.product_cost }}</td>
                               <td><button class="btn btn-round">
                                   <a href="{% url 'basket:remove' item.pk  %}"> Удалить</a>
