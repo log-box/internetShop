@@ -18,4 +18,8 @@ urlpatterns = [
     path('products/read/<int:pk>/', ProductDetailView.as_view(), name='product_read'),
     path('products/update/<int:pk>/', ProductUpdateView.as_view(), name='product_update'),
     path('products/delete/<int:pk>/', ProductDeleteView.as_view(), name='product_delete'),
+
+
+
+    path('orders/read/', OrdersListView.as_view(), name='orders'),
 ]

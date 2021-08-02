@@ -38,12 +38,13 @@ class BasketAddView(View):
             return HttpResponseRedirect(reverse('products:product', args=[kwargs['pk']]))
         if request.user.is_authenticated:
             product = get_object_or_404(Product, pk=kwargs['pk'])
-            basket = Basket.objects.filter(user=request.user, product=product).first()
-            if not basket:
-                basket = Basket(user=request.user, product=product)
-            basket.quantity += 1
-            basket.save()
-            return HttpResponseRedirect(reverse('mainapp:group_of_products', kwargs={'slug': product.category.href}))
+            if product.quantity > 0:
+                basket = Basket.objects.filter(user=request.user, product=product).first()
+                if not basket:
+                    basket = Basket(user=request.user, product=product)
+                basket.quantity += 1
+                basket.save()
+                return HttpResponseRedirect(reverse('mainapp:group_of_products', kwargs={'slug': product.category.href}))
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
