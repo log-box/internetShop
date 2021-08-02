@@ -1034,6 +1034,7 @@ td:first-child {
 	height: 370px;
 	width: 370px;
 	position: relative;
+	bottom: 27px;
 }
 .related-products .block:nth-child(3n) {
 	margin-right: 0px;
@@ -1045,7 +1046,7 @@ td:first-child {
 	background-color: #ffffff;
     opacity: 0.9;
     position: absolute;
-    top: 0;
+    /*top: 27px;*/
     text-align: center;
     border: 1px solid #9c9c9c;
 }
@@ -1066,11 +1067,13 @@ td:first-child {
 .related-products a .text img {
 	float: none;
 	margin-top: 80px;
+
 }
 
 
 .related-products a:hover .text{
 	display: block;
+
 }
 
 .index_img{
@@ -1083,3 +1086,6 @@ td:first-child {
     background-color: #d9dee1;
 }
 
+/*.prod_img_370{*/
+/*		top: 27px;*/
+/*}*/
