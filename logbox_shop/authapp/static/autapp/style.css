@@ -1,0 +1,20 @@
+.row{
+    justify-content: center;
+}
+
+.user_avatar{
+    display: flex;
+    width: 500px;
+    height: 300px;
+    justify-content: center;
+}
+
+.user_avatar img{
+    height: auto;
+    width: auto;
+}
+
+.form-horizontal p:last-child a{
+    content: '123';
+
+}

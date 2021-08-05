@@ -1,0 +1,35 @@
+{% extends 'adminapp/base.html' %}
+{% load static %}
+
+
+{% block content %}
+    <div class="col-4 mx-auto">
+    <div class="row">
+        {% if object.is_superuser  %}
+            Удалять суперпользователя запрещено
+            <button class="btn btn-round form-control last">
+                <a href="{% url 'admin_stuff:users' %}" class="">
+                Назад
+                </a>
+            </button>
+        {% else %}
+            <div class="row">
+                <div class="user_avatar">
+                    Вы действительно хотите удалить пользователя {{ object.username }} ?
+                </div>
+            </div>
+            <form class="form-horizontal" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input class="form-control" type="submit" value="Удалить">
+            </form>
+            <button class="btn btn-light">
+                <a href="{% url 'admin_stuff:users' %}" class="">
+                Назад
+                </a>
+            </button>
+
+        {% endif %}
+    </div>
+    </div>
+{% endblock %}

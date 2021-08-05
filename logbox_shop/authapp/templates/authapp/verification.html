@@ -1,0 +1,28 @@
+{% extends 'authapp/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="h2 text-center head">
+        Активация нового пользователя
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="mx-auto col-3">
+                {% if err %}
+                    <h1>Ошибка!</h1>
+                    <p>обратитесь к администратору и можете перейти на главную страницу.</p>
+                    <p> Текст ошибки: {{ err }}</p>
+
+                {% else %}
+                    <h1>Поздравляем!</h1>
+                    <p>Активация пользователя {{ user }}, прошла успешно! Теперь вы можете перейти на сайт.</p>
+                {% endif %}
+            </div>
+        </div>
+        <button class="btn btn-round form-control">
+        <a href="{% url 'index' %}" class="">
+            Назад
+        </a>
+    </button>
+    </div>
+{% endblock %}

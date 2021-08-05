@@ -1,0 +1,65 @@
+[
+  {
+    "category": "дом",
+    "name": "Лампа",
+    "image": "products_images/product-1.jpg",
+    "short_desc": "Белая лампа",
+    "description": "Хорошая лампа для спальни",
+    "price": "1500.00",
+    "quantity": 15
+  },
+  {
+    "category": "офис",
+    "name": "Синее Кресло",
+    "image": "products_images/product-2.jpg",
+    "short_desc": "Удобное синее кресло",
+    "description": "Хорошее кресло для современного офиса",
+    "price": "15000.00",
+    "quantity": 5
+  },
+  {
+    "category": "модерн",
+    "name": "чайник",
+    "image": "products_images/product-3.jpg",
+    "short_desc": "Белый современный чайник",
+    "description": "Крайне стильный и необычный чайник в стиле модерн",
+    "price": "1000.11",
+    "quantity": 1
+  },
+  {
+    "category": "классика",
+    "name": "Красное кресло",
+    "image": "products_images/product-4.jpg",
+    "short_desc": "Классическое красное кресло",
+    "description": "Классическое красное кресло для души и комфорта ...",
+    "price": "25000.00",
+    "quantity": 3
+  },
+  {
+    "category": "дом",
+    "name": "Лампа",
+    "image": "products_images/product-11.jpg",
+    "short_desc": "Лампа подвесная",
+    "description": "Прикольная подвесная лампа для Вашего дома",
+    "price": "15000.00",
+    "quantity": 3
+  },
+  {
+    "category": "офис",
+    "name": "Кресло белое",
+    "image": "products_images/product-21.jpg",
+    "short_desc": "Офисное белое кресло",
+    "description": "Стильное офисное белое кресло для Ваших сотрудников",
+    "price": "50000.00",
+    "quantity": 9
+  },
+  {
+    "category": "модерн",
+    "name": "Черная лампа",
+    "image": "products_images/product-31.jpg",
+    "short_desc": "Черная современная лампа",
+    "description": "Черная как сама ночь Лампа для любителей модерна",
+    "price": "12312.00",
+    "quantity": 34
+  }
+]

@@ -1,0 +1,59 @@
+{% extends 'adminapp/base.html' %}
+{% load static %}
+
+{% block content %}
+<main>
+    <div class="container-fluid">
+        <h1 class="mt-4">Категории товаров</h1>
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-table mr-1"></i>
+                Категории
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th>Категория</th>
+                            <th>Описание</th>
+                            <th>Дата добавления</th>
+                            <th>Дата изменения</th>
+                            <th>Редактировать категорию</th>
+                            <th>Удалить</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for object in object_list %}
+                            {% if object.pk != 1 %}
+                            <tr {% if object.is_deleted %} style="opacity: 0.5;" {% endif %}>
+                                <td><a href="{% url 'admin_stuff:products' object.pk %}" style="color: dodgerblue">{{ object.name }}</a></td>
+                                <td>{{ object.description }}</td>
+                                <td>{{ object.created }}</td>
+                                <td>{{ object.updated }}</td>
+                                <td>
+                                    <a href="{% url 'admin_stuff:category_update' object.pk %}">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a {% if object.is_deleted %} class="invisible" {% endif %} href="{% url 'admin_stuff:category_delete' object.pk %}">
+                                        <i class="fa fa-times-circle"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endif %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'admin_stuff:category_create' %}">
+                    <button class="btn btn-success">Создать категорию товара</button>
+                </a>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

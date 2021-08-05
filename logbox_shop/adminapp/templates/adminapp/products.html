@@ -1,0 +1,69 @@
+{% extends 'adminapp/base.html' %}
+{% load static %}
+{% load my_tags %}
+{% block content %}
+<main>
+    <div class="container-fluid">
+        <h1 class="mt-4">Товары категории {{ prod.0.category|title }} </h1>
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas  mr-1"></i>
+                {{ prod.0.category|title }}
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th>Название товара</th>
+                            <th>Фото</th>
+                            <th>Краткое описание</th>
+                            <th>Полное описание</th>
+                            <th>Цена</th>
+                            <th>Остаток на складе</th>
+                            <th>Изменить</th>
+                            <th>Удалить</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for product in object_list %}
+                            <tr {% if product.is_deleted %} style="opacity: 0.5;" {% endif %}>
+                                <td>
+                                    <a href="{% url 'admin_stuff:product_read' product.pk %}">
+                                        {{ product.name }}
+                                    </a>
+                                </td>
+                                <td> <img  class="img-responsive watch-right" alt="not found" src="{{product.image|media_folder_products}}"/></td>
+                                <td>{{ product.short_desc }}</td>
+                                <td>{{ product.description }}</td>
+                                <td>{{ product.price }}</td>
+                                <td>{{ product.quantity }}</td>
+                                <td>
+                                    <a href="{% url 'admin_stuff:product_update' product.pk %}">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a {% if product.is_deleted %} class="invisible" {% endif %} href="{% url 'admin_stuff:product_delete' product.pk %}">
+                                        <i class="fa fa-times-circle"></i>
+                                    </a>
+                                </td>
+                            </tr>
+
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'admin_stuff:product_create' prod.0.category.pk %}">
+                    <button class="btn btn-success">Создать новый товар</button>
+                </a>
+                <a href="{% url 'admin_stuff:categories' %}">
+                    <button class="btn btn-success">Назад в Категории</button>
+                </a>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

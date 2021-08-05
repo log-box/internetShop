@@ -1,0 +1,10 @@
+<div class="links clearfix">
+    <ul class="links-menu">
+
+        {% for link in products_category_menu %}
+            {% if link.is_deleted == False %}
+            <li><a href="/products/{{link.href}}" class="{% if request.resolver_match.kwargs.slug == link.href %}active{% endif %}">{{link.name}}</a></li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+</div>

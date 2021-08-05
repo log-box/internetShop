@@ -1,0 +1,22 @@
+<div class="nav_list">
+    <a href="{% url 'admin_stuff:categories' %}" class="nav_link {% if request.resolver_match.url_name == 'categories' %}
+                active
+           {% endif %}">
+        <i class='bx bx-grid-alt nav_icon'></i>
+        <span class="nav_name">Продукты</span>
+    </a>
+    <a href="{% url 'admin_stuff:users' %}" class="{% if request.resolver_match.url_name == 'users' %}
+                active
+           {% endif %} nav_link">
+        <i class='bx bx-user nav_icon'></i>
+        <span class="nav_name">Пользователи</span>
+    </a>
+        <a href="{% url 'admin_stuff:orders' %}" class="{% if request.resolver_match.url_name == 'orders' %}
+                active
+           {% endif %} nav_link">
+        <i class='bx bx-calendar-check'></i>
+        <span class="iconify">Заказы</span>
+    </a>
+
+
+</div>

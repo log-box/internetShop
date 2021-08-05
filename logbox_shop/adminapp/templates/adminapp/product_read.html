@@ -1,0 +1,23 @@
+{% extends 'adminapp/base.html' %}
+{% load static %}
+{% load my_tags %}
+
+{% block content %}
+
+    <div class="card" style="width: 18rem;">
+        <h2>Товар из категории: {{ object.category|title }}</h2>
+        <img src="{{object.image|media_folder_products}}" class="card-img-top" alt="not found img">
+    <div class="card-body">
+    <h5 class="card-title">{{ object.name }}</h5>
+    <p class="card-text">{{ object.description }}</p>
+    <p class="card-text">Цена:{{ object.price }}руб.</p>
+    <p class="card-text">Остаток:{{ object.quantity }}шт.</p>
+    <p class="card-text"> {{ object.short_desc }}</p>
+    <a href="{% url 'admin_stuff:products' object.category.pk %}" class="btn btn-primary">Назад</a>
+    </div>
+    </div>
+
+
+
+
+{% endblock %}
