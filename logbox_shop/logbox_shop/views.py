@@ -12,7 +12,7 @@ def getjson(obj):
 
 def index(request):
     title = 'магазин/главная'
-    products = Product.objects.all()[:3]
+    products = Product.objects.filter(is_deleted=False, category__is_deleted=False)[:3]
     context = {
         # 'general_menu_links': getjson('general_menu_links'),
         'title': title,
