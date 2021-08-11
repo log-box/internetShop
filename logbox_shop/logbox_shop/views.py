@@ -3,6 +3,7 @@ import json
 from django.shortcuts import render
 
 from mainapp.models import Product
+# from mainapp.views import get_products
 
 
 def getjson(obj):
@@ -12,6 +13,7 @@ def getjson(obj):
 
 def index(request):
     title = 'магазин/главная'
+    # products = get_products()[:3]
     products = Product.objects.filter(is_deleted=False, category__is_deleted=False)[:3]
     context = {
         # 'general_menu_links': getjson('general_menu_links'),
