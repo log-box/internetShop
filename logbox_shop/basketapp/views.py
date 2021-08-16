@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import user_passes_test
+from django.db.models import F, Q
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404
 # Create your views here.
@@ -43,6 +44,7 @@ class BasketAddView(View):
                 if not basket:
                     basket = Basket(user=request.user, product=product)
                 basket.quantity += 1
+                # basket[0].quantity = F('quantity') +1
                 basket.save()
                 return HttpResponseRedirect(reverse('mainapp:group_of_products', kwargs={'slug': product.category.href}))
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
