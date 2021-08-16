@@ -3,6 +3,9 @@ import random
 from django.conf import settings
 from django.core.cache import cache
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.db import connection
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
@@ -11,6 +14,7 @@ from django.views.generic import ListView
 from django.views.generic.base import TemplateView
 
 from mainapp.models import ProductCategory, Product
+
 
 ################################
 
@@ -85,6 +89,8 @@ def get_products_in_category_orederd_by_price(pk):
         return products
     else:
         return Product.objects.filter(category__pk=pk, is_deleted=False, category__is_deleted=False).order_by('price')
+
+
 ####################################
 
 
@@ -92,6 +98,7 @@ def get_hot_product():
     products = get_products()
     # return random.sample(list(Product.objects.all()), 1)[0]
     return random.sample(list(products), 1)[0]
+
 
 def get_same_products(hot_product):
     return Product.objects.filter(category=hot_product.category).exclude(pk=hot_product.pk)[:3]
@@ -105,7 +112,7 @@ class ProductsView(TemplateView):
         context = super().get_context_data(**kwargs)
         # context['general_menu_links'] = getjson('general_menu_links')
         context['title'] = 'Магазин/Продукция'
-        context['products_category_menu'] = self.links_menu #ProductCategory.objects.all()
+        context['products_category_menu'] = self.links_menu  # ProductCategory.objects.all()
         context['same_products'] = get_same_products(get_hot_product())
         context['hot_product'] = get_hot_product()
         return context
@@ -114,12 +121,14 @@ class ProductsView(TemplateView):
 class ProductView(TemplateView):
     template_name = 'product.html'
     links_menu = get_links_menu()
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = f'Продукты/{(get_object_or_404(Product, pk=self.kwargs.get("pk"))).short_desc}'
         # context['general_menu_links'] = getjson('general_menu_links')
-        context['products_category_menu'] = self.links_menu # ProductCategory.objects.all()
-        context['product'] =  get_product(pk=self.kwargs.get("pk")) #,get_object_or_404(Product, pk=self.kwargs.get("pk"))
+        context['products_category_menu'] = self.links_menu  # ProductCategory.objects.all()
+        context['product'] = get_product(
+            pk=self.kwargs.get("pk"))  # ,get_object_or_404(Product, pk=self.kwargs.get("pk"))
         return context
 
 
@@ -159,8 +168,8 @@ def products_ajax(request, pk=None, page=1):
         if pk:
             if pk == '0':
                 category = {
-                'pk': 0,
-                'name': 'все'
+                    'pk': 0,
+                    'name': 'все'
                 }
             products = get_products_orederd_by_price()
         else:
@@ -179,9 +188,7 @@ def products_ajax(request, pk=None, page=1):
             'products': products_paginator,
         }
         result = render_to_string(
-                'mainapp/includes/inc_products_list_content.html',
-                context=content,
-                request=request)
+            'mainapp/includes/inc_products_list_content.html',
+            context=content,
+            request=request)
         return JsonResponse({'result': result})
-
-

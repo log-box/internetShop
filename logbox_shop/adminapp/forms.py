@@ -31,9 +31,11 @@ class ShopUserAdminRegisterForm(ShopUserRegisterForm):
 
 
 class ProductsCategoryEditForm(ModelForm):
+    discount = forms.IntegerField(label='discount', required=False, min_value=0, max_value=90, initial=0)
+
     class Meta:
         model = ProductCategory
-        fields = ['name', 'description', 'href', 'is_deleted']
+        fields = ['name', 'description', 'href', 'is_deleted', 'discount']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
